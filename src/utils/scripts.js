@@ -1,5 +1,7 @@
 const fs = require('fs');
 const { memoizeWith, pipe, map, filter, tryCatch, always } = require('ramda');
+const { warnForError } = require('./chalk');
+const { throwIfProd } = require('./env');
 const { scriptsPath, SCRIPTS_PATH } = require('./paths');
 
 /**
@@ -10,7 +12,12 @@ const { scriptsPath, SCRIPTS_PATH } = require('./paths');
  * @type {() => ScriptObject[]}
  */
 const getScripts = memoizeWith(always(1), () => {
-  const tryRequire = tryCatch((path) => require(path).run, always(null));
+  const tryRequire = tryCatch(
+    (path) => require(path).run,
+    // The following function will always return `null`, as `console.*` methods
+    // always return `undefined`, and the `||` will "pipe" to `null`.
+    (error) => console.warn(warnForError(throwIfProd(error))) || null
+  );
 
   const createScriptObject = pipe(
     (name) => ({ name, path: scriptsPath(name, 'index.js') }),
