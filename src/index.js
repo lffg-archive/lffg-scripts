@@ -1,3 +1,5 @@
+const { errorForError } = require('./utils/chalk');
+const { throwIfDev } = require('./utils/env');
 const { invalidScript } = require('./utils/messages');
 const { isValidScript, getScriptByName } = require('./utils/scripts');
 
@@ -7,12 +9,16 @@ const { isValidScript, getScriptByName } = require('./utils/scripts');
  * @return {void}
  */
 function run(scriptName, args) {
-  if (!scriptName || !isValidScript(scriptName)) {
-    return console.error(invalidScript(scriptName));
-  }
+  try {
+    if (!scriptName || !isValidScript(scriptName)) {
+      return console.error(invalidScript(scriptName));
+    }
 
-  const { run } = getScriptByName(scriptName);
-  run(args);
+    const { run } = getScriptByName(scriptName);
+    run(args);
+  } catch (error) {
+    console.error(errorForError(throwIfDev(error)));
+  }
 }
 
 module.exports = {
