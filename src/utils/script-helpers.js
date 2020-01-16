@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const spawn = require('cross-spawn');
-const debug = require('debug')('lffg:script-helpers');
+const debug = require('debug')('lffg-scripts:script-helpers');
 const { path: ramdaPath } = require('ramda');
 const readPkgUp = require('read-pkg-up');
 const which = require('which');
