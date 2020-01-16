@@ -1,0 +1,26 @@
+{
+  "name": "lffg-scripts",
+  "version": "0.0.0-alpha.0",
+  "description": "A CLI that glues common scripts and dependencies for my projects",
+  "repository": "https://github.com/lffg/lffg-scripts",
+  "author": "Luiz Felipe Gonçalves <https://luizfelipe.dev>",
+  "license": "MIT",
+  "scripts": {
+    "start": "NODE_ENV=development node bin/lffg"
+  },
+  "dependencies": {
+    "chalk": "^3.0.0",
+    "cross-spawn": "^7.0.1",
+    "eslint": "^6.8.0",
+    "eslint-config-lffg": "^10.0.1",
+    "ramda": "^0.26.1"
+  },
+  "devDependencies": {
+    "@types/cross-spawn": "^6.0.1",
+    "@types/node": "^13.1.7",
+    "@types/ramda": "^0.26.39"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
