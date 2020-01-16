@@ -12,6 +12,7 @@ const scriptsPath = apply(__dirname, '..', 'scripts');
 const SCRIPTS_PATH = scriptsPath();
 
 module.exports = {
+  apply,
   scriptsPath,
   SCRIPTS_PATH
 };
