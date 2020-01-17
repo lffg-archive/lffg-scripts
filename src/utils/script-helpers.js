@@ -24,7 +24,7 @@ const callerPkg = pkgInfo.packageJson;
  * @param {any} defaultValue
  * @return {any}
  */
-function getFromPkg(fieldPath, defaultValue = undefined) {
+function getPkgProp(fieldPath, defaultValue = undefined) {
   const contents = ramdaPath(
     Array.isArray(fieldPath) ? fieldPath : fieldPath.split('.'),
     callerPkg
@@ -38,8 +38,8 @@ function getFromPkg(fieldPath, defaultValue = undefined) {
  * @param {any} expectedFieldValue
  * @return {boolean}
  */
-function hasInPkg(fieldPath, expectedFieldValue = Symbol.for('DEFAULT')) {
-  const contents = getFromPkg(fieldPath);
+function hasPkgProp(fieldPath, expectedFieldValue = Symbol.for('DEFAULT')) {
+  const contents = getPkgProp(fieldPath);
 
   if (!contents) return false;
   if (expectedFieldValue === Symbol.for('DEFAULT')) return true;
@@ -125,12 +125,59 @@ function exec(moduleName, args, userOptions = {}) {
   return spawnInRoot(resolveBin(moduleName, options.moduleExecutable), args);
 }
 
+/**
+ * Joins the given path with the caller directory's root unless an absolute path
+ * is given. If an absolute path is given, it will be returned back with no
+ * manipulations.
+ *
+ * @param {string[]} paths
+ * @return {string}
+ */
+function resolvePath(...paths) {
+  const pathName = path.join(...paths);
+
+  if (path.isAbsolute(pathName)) {
+    debug('Absolute path given to `resolvePath`.');
+    return pathName;
+  }
+
+  return path.join(CALLER_ROOT_PATH, pathName);
+}
+
+/**
+ * @param {string[]} paths
+ * @return {boolean}
+ */
+function hasFile(...paths) {
+  return fs.existsSync(resolvePath(...paths));
+}
+
+/**
+ * Resolves a configuration file path from `src/config`.
+ * Throws an error if the config does not exist.
+ *
+ * @param {string} configFileName
+ * @return {string} - The config path.
+ */
+function resolveConfigPath(configFileName) {
+  const configPath = path.join(__dirname, '../config', configFileName);
+
+  if (!fs.existsSync(configPath)) {
+    throw new Error(`The config "${configFileName}" does not exist.`);
+  }
+
+  return configPath;
+}
+
 module.exports = {
   CALLER_ROOT_PATH,
   callerRootPath,
-  getFromPkg,
-  hasInPkg,
+  getPkgProp,
+  hasPkgProp,
   resolveBin,
   spawnInRoot,
-  exec
+  exec,
+  resolvePath,
+  hasFile,
+  resolveConfigPath
 };
