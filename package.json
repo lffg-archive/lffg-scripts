@@ -1,6 +1,6 @@
 {
   "name": "lffg-scripts",
-  "version": "0.0.0-alpha-todo.5",
+  "version": "0.0.0-alpha-todo.7",
   "description": "A CLI that glues common scripts and dependencies for my projects",
   "repository": "https://github.com/lffg/lffg-scripts",
   "author": "Luiz Felipe Gonçalves <https://luizfelipe.dev>",
@@ -13,7 +13,6 @@
     "start:prod": "NODE_ENV=production node bin/lffg"
   },
   "dependencies": {
-    "@types/debug": "^4.1.5",
     "chalk": "^3.0.0",
     "cross-spawn": "^7.0.1",
     "debug": "^4.1.1",
@@ -25,6 +24,7 @@
   },
   "devDependencies": {
     "@types/cross-spawn": "^6.0.1",
+    "@types/debug": "^4.1.5",
     "@types/node": "^13.1.7",
     "@types/ramda": "^0.26.39",
     "@types/which": "^1.3.2"
