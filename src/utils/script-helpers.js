@@ -47,19 +47,11 @@ function hasInPkg(fieldPath, expectedFieldValue = Symbol.for('DEFAULT')) {
   return false;
 }
 
-/**
- * @param {string} command
- * @param {string[]} args
- * @return {any}
- */
-function spawnInRoot(command, ...args) {
-  return spawn.sync(command, args, { stdio: 'inherit' });
-}
-
 // Adapted from https://github.com/kentcdodds/kcd-scripts
 /**
  * @param {string} modName
  * @param {string | undefined} executable
+ * @return {string}
  */
 function resolveBin(modName, executable = modName) {
   debug(`Resolving bin for module ${modName}, executable ${executable}`);
@@ -108,11 +100,37 @@ function resolveBin(modName, executable = modName) {
   }
 }
 
+/**
+ * @param {string} command
+ * @param {string[]} args
+ * @return {import('child_process').SpawnSyncReturns<Buffer>}
+ */
+function spawnInRoot(command, args) {
+  return spawn.sync(command, args, {
+    cwd: CALLER_ROOT_PATH,
+    stdio: 'inherit'
+  });
+}
+
+/**
+ * Calls `spawnInRoot` and resolves the given `moduleName` using `resolveBin`.
+ *
+ * @param {string} moduleName
+ * @param {string[]} args
+ * @param {{ moduleExecutable: string }} userOptions
+ * @return {import('child_process').SpawnSyncReturns<Buffer>}
+ */
+function exec(moduleName, args, userOptions = {}) {
+  const options = { moduleExecutable: moduleName, ...userOptions };
+  return spawnInRoot(resolveBin(moduleName, options.moduleExecutable), args);
+}
+
 module.exports = {
   CALLER_ROOT_PATH,
   callerRootPath,
   getFromPkg,
   hasInPkg,
+  resolveBin,
   spawnInRoot,
-  resolveBin
+  exec
 };
