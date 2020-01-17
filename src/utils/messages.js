@@ -1,7 +1,6 @@
-const chalk = require('chalk');
-const { getScriptNames } = require('./scripts');
-const { joinList } = require('./formatter');
 const { quoteAndUnderline } = require('./chalk');
+const { joinList } = require('./formatter');
+const { getScriptNames } = require('./scripts');
 
 /**
  * @param {string | undefined} scriptName

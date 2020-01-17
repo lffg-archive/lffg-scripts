@@ -4,11 +4,10 @@ const { invalidScript } = require('./utils/messages');
 const { isValidScript, getScriptByName } = require('./utils/scripts');
 
 /**
- * @param {string} scriptName
- * @param {string[]} args
+ * @param {{ scriptName: string, args: string[] }} args |
  * @return {void}
  */
-function run(scriptName, args) {
+function run({ scriptName, args }) {
   try {
     if (!scriptName || !isValidScript(scriptName)) {
       return console.error(invalidScript(scriptName));
